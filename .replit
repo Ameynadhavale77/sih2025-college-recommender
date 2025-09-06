@@ -1,7 +1,11 @@
 run = "cd frontend && npm install && npm run dev"
+modules = ["nodejs-20", "nix", "web"]
 
 [env]
 PORT = "3000"
 
 [interpreter]
 command = ["node"]
+
+[nix]
+channel = "stable-25_05"
