@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "text": "How would you rate your Mathematics skills?",
+    "type": "single",
+    "options": ["Excellent (Love complex problems)", "Good (Comfortable with formulas)", "Average (Basic calculations only)", "Struggle with math"],
+    "score": {"Excellent (Love complex problems)": 4, "Good (Comfortable with formulas)": 3, "Average (Basic calculations only)": 2, "Struggle with math": 1}
+  },
+  {
+    "id": 2, 
+    "text": "Which subjects do you find most interesting?",
+    "type": "multi",
+    "options": ["Physics & Chemistry", "Biology & Life Sciences", "Economics & Business", "History & Literature", "Computer Science", "Arts & Design"],
+    "score": {"Physics & Chemistry": 4, "Biology & Life Sciences": 3, "Economics & Business": 3, "History & Literature": 2, "Computer Science": 4, "Arts & Design": 2}
+  },
+  {
+    "id": 3,
+    "text": "What type of work environment appeals to you most?",
+    "type": "single", 
+    "options": ["Laboratory & Research", "Hospitals & Healthcare", "Corporate Offices", "Creative Studios", "Technology Companies", "Government & Public Service"],
+    "score": {"Laboratory & Research": 4, "Hospitals & Healthcare": 3, "Corporate Offices": 3, "Creative Studios": 2, "Technology Companies": 4, "Government & Public Service": 2}
+  },
+  {
+    "id": 4,
+    "text": "How do you prefer to solve problems?",
+    "type": "single",
+    "options": ["Logical reasoning & analysis", "Creative thinking & innovation", "Following proven methods", "Collaborative discussion"],
+    "score": {"Logical reasoning & analysis": 4, "Creative thinking & innovation": 3, "Following proven methods": 2, "Collaborative discussion": 3}
+  },
+  {
+    "id": 5,
+    "text": "What are your career aspirations?",
+    "type": "single",
+    "options": ["Become a technical expert/engineer", "Work in healthcare/medicine", "Start my own business", "Pursue research & academics", "Work in government/civil services", "Creative fields (media, design, arts)"],
+    "score": {"Become a technical expert/engineer": 4, "Work in healthcare/medicine": 4, "Start my own business": 3, "Pursue research & academics": 3, "Work in government/civil services": 2, "Creative fields (media, design, arts)": 2}
+  },
+  {
+    "id": 6,
+    "text": "Where would you prefer to study?",
+    "type": "single",
+    "options": ["Delhi", "Mumbai", "Bangalore", "Chennai", "Hyderabad", "Pune", "Kolkata", "Ahmedabad", "Jaipur", "Lucknow", "Other major cities", "Anywhere in India"],
+    "score": {"Delhi": 3, "Mumbai": 3, "Bangalore": 3, "Chennai": 3, "Hyderabad": 3, "Pune": 3, "Kolkata": 3, "Ahmedabad": 3, "Jaipur": 3, "Lucknow": 3, "Other major cities": 2, "Anywhere in India": 1}
+  },
+  {
+    "id": 7,
+    "text": "What is your preferred learning style?",
+    "type": "single",
+    "options": ["Hands-on practical work", "Theoretical study & concepts", "Mix of both theory and practice", "Group projects & teamwork"],
+    "score": {"Hands-on practical work": 4, "Theoretical study & concepts": 3, "Mix of both theory and practice": 4, "Group projects & teamwork": 3}
+  }
+]
