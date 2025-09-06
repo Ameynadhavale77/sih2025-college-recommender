@@ -46,6 +46,12 @@ function LandingPage() {
         {/* Call to Action */}
         <div className="text-center">
           <Link 
+            to="/login" 
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition duration-300 inline-block mr-4"
+          >
+            🔐 Login / Sign Up
+          </Link>
+          <Link 
             to="/quiz" 
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition duration-300 inline-block mr-4"
           >

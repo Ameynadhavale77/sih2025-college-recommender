@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LandingPage from './components/LandingPage'
 import Quiz from './components/Quiz'
 import Dashboard from './components/Dashboard'
+import Login from './components/Login'
+import PersonalInfo from './components/PersonalInfo'
 
 import './index.css'
 
@@ -12,7 +14,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<h1 className="text-center text-2xl mt-16">Login Coming Soon</h1>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/personal-info" element={<PersonalInfo />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/quiz" element={<Quiz />} />
       </Routes>
