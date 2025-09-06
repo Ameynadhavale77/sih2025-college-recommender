@@ -1,14 +1,19 @@
 import { getCollegesForRecommendation } from './collegeAPI';
+import { getStreamRecommendations, getTopStreamRecommendation } from './streamRecommender';
 
-// Enhanced recommendation algorithm using CollegeAPI
+// Enhanced recommendation algorithm with stream analysis first
 export async function getRecommendations(answers) {
   try {
+    // First get stream recommendations based on academic capability
+    const streamRecommendations = getStreamRecommendations(answers);
+    const topStream = getTopStreamRecommendation(answers);
+    
     // Extract user preferences from answers
     const userPreferences = {
-      stream: answers[1], // Science, Commerce, Arts, Engineering, etc.
-      location: answers[3], // Location preference
-      coursePreference: answers[2], // Specific course preference
-      practicalWork: answers[4] // Practical work interest level
+      stream: topStream.stream, // Use recommended stream
+      location: answers[6], // Location preference (question 6)
+      learningStyle: answers[7], // Learning style preference
+      recommendedStreams: streamRecommendations // Pass all stream recommendations
     };
 
     // Fetch colleges from API based on preferences
@@ -24,35 +29,8 @@ export async function getRecommendations(answers) {
         score += rankBonus;
       }
 
-      // Stream preference scoring
-      if (answers[1] === "Science") {
-        if (college.category === 'engineering' || college.name.toLowerCase().includes('science')) {
-          score += 35;
-        }
-        if (college.courses && college.courses.some(c => ["B.Tech", "B.Sc", "MBBS", "BCA"].includes(c))) {
-          score += 30;
-        }
-      }
-      
-      if (answers[1] === "Commerce") {
-        if (college.category === 'management' || college.name.toLowerCase().includes('management')) {
-          score += 35;
-        }
-        if (college.courses && college.courses.some(c => ["BBA", "BCom", "MBA", "BCA"].includes(c))) {
-          score += 30;
-        }
-      }
-      
-      if (answers[1] === "Arts") {
-        if (college.name.toLowerCase().includes('arts') || college.name.toLowerCase().includes('university')) {
-          score += 35;
-        }
-        if (college.courses && college.courses.some(c => ["BA", "MA", "B.Ed"].includes(c))) {
-          score += 30;
-        }
-      }
-      
-      if (answers[1] === "Engineering") {
+      // Stream preference scoring based on recommended stream
+      if (topStream.stream === "Engineering") {
         if (college.category === 'engineering' || college.name.toLowerCase().includes('engineering') || college.name.toLowerCase().includes('nit') || college.name.toLowerCase().includes('iit')) {
           score += 40;
         }
@@ -60,8 +38,8 @@ export async function getRecommendations(answers) {
           score += 35;
         }
       }
-
-      if (answers[1] === "Medical") {
+      
+      if (topStream.stream === "Medical") {
         if (college.category === 'medical' || college.name.toLowerCase().includes('medical') || college.name.toLowerCase().includes('aiims')) {
           score += 40;
         }
@@ -69,29 +47,62 @@ export async function getRecommendations(answers) {
           score += 35;
         }
       }
+      
+      if (topStream.stream === "Management") {
+        if (college.category === 'management' || college.name.toLowerCase().includes('management') || college.name.toLowerCase().includes('business')) {
+          score += 40;
+        }
+        if (college.courses && college.courses.some(c => ["BBA", "MBA", "PGDM", "B.Com"].includes(c))) {
+          score += 35;
+        }
+      }
+      
+      if (topStream.stream === "Science") {
+        if (college.category === 'general' || college.name.toLowerCase().includes('science') || college.name.toLowerCase().includes('university')) {
+          score += 35;
+        }
+        if (college.courses && college.courses.some(c => ["B.Sc", "M.Sc", "B.Tech", "Research"].includes(c))) {
+          score += 30;
+        }
+      }
+      
+      if (topStream.stream === "Arts") {
+        if (college.name.toLowerCase().includes('arts') || college.name.toLowerCase().includes('university') || college.name.toLowerCase().includes('college')) {
+          score += 35;
+        }
+        if (college.courses && college.courses.some(c => ["BA", "MA", "B.Ed", "Fine Arts"].includes(c))) {
+          score += 30;
+        }
+      }
 
-      // Location preference scoring
-      if (answers[3] && answers[3] !== "Anywhere") {
-        if (college.location && college.location.toLowerCase().includes(answers[3].toLowerCase())) {
+      // Location preference scoring (Question 6)
+      if (answers[6] && answers[6] !== "Anywhere in India") {
+        if (college.location && college.location.toLowerCase().includes(answers[6].toLowerCase())) {
           score += 25;
         }
-        if (college.state && college.state.toLowerCase().includes(answers[3].toLowerCase())) {
+        if (college.state && college.state.toLowerCase().includes(answers[6].toLowerCase())) {
           score += 20;
         }
-      } else if (answers[3] === "Anywhere") {
+      } else if (answers[6] === "Anywhere in India") {
         score += 10; // Small bonus for flexibility
       }
 
-      // Course preference scoring (if specific course mentioned)
-      if (answers[2] && college.courses && college.courses.includes(answers[2])) {
-        score += 30;
-      }
-
-      // Practical work preference
-      if (answers[4] === "High") {
+      // Learning style preference scoring (Question 7)
+      if (answers[7] === "Hands-on practical work") {
         if (college.category === 'engineering' || college.name.toLowerCase().includes('polytechnic') || college.name.toLowerCase().includes('institute of technology')) {
           score += 20;
         }
+      } else if (answers[7] === "Theoretical study & concepts") {
+        if (college.name.toLowerCase().includes('university') || college.name.toLowerCase().includes('research')) {
+          score += 15;
+        }
+      }
+
+      // Stream match confidence bonus
+      if (topStream.percentage >= 80) {
+        score += 15; // High confidence in stream recommendation
+      } else if (topStream.percentage >= 60) {
+        score += 10; // Medium confidence
       }
 
       // Budget considerations (if specified in future quiz updates)
@@ -110,9 +121,15 @@ export async function getRecommendations(answers) {
       return { ...college, score: Math.min(score, 100) };
     });
 
-    // Sort by score and return top 5
+    // Sort by score and return top 5 with stream recommendations
     scoredColleges.sort((a, b) => b.score - a.score);
-    return scoredColleges.slice(0, 5);
+    const topColleges = scoredColleges.slice(0, 5);
+    
+    return {
+      streamRecommendations,
+      topStream,
+      colleges: topColleges
+    };
 
   } catch (error) {
     console.error("Error fetching recommendations:", error);
@@ -126,26 +143,33 @@ export async function getRecommendations(answers) {
       {"name":"GC Jammu","location":"Jammu","state":"Jammu and Kashmir","courses":["BBA","BA","B.Sc"],"cutoff":65,"hostel":false,"budget":"Low"}
     ];
 
+    // Get stream recommendations for fallback too
+    const streamRecommendations = getStreamRecommendations(answers);
+    const topStream = getTopStreamRecommendation(answers);
+    
     // Apply same scoring logic to fallback data
     const scoredFallback = fallbackColleges.map(college => {
       let score = 0;
       
-      // Stream preference scoring for fallback
-      if (answers[1] === "Science" && college.courses.some(c => ["B.Tech", "B.Sc", "MBBS"].includes(c))) {
-        score += 30;
-      }
-      if (answers[1] === "Engineering" && college.courses.some(c => ["B.Tech"].includes(c))) {
+      // Stream preference scoring for fallback using recommended stream
+      if (topStream.stream === "Engineering" && college.courses.some(c => ["B.Tech"].includes(c))) {
         score += 35;
       }
-      if (answers[1] === "Medical" && college.courses.some(c => ["MBBS"].includes(c))) {
+      if (topStream.stream === "Medical" && college.courses.some(c => ["MBBS", "MD"].includes(c))) {
         score += 35;
       }
-      if (answers[1] === "Commerce" && college.courses.some(c => ["BBA"].includes(c))) {
+      if (topStream.stream === "Management" && college.courses.some(c => ["BBA", "MBA"].includes(c))) {
+        score += 35;
+      }
+      if (topStream.stream === "Science" && college.courses.some(c => ["B.Sc", "B.Tech"].includes(c))) {
         score += 30;
+      }
+      if (topStream.stream === "Arts" && college.courses.some(c => ["BA", "B.Sc"].includes(c))) {
+        score += 25;
       }
       
-      // Location preference
-      if (answers[3] === college.location) {
+      // Location preference (Question 6)
+      if (answers[6] && college.location && answers[6].includes(college.location)) {
         score += 20;
       }
       
@@ -154,6 +178,10 @@ export async function getRecommendations(answers) {
     });
 
     scoredFallback.sort((a, b) => b.score - a.score);
-    return scoredFallback.slice(0, 5);
+    return {
+      streamRecommendations,
+      topStream,
+      colleges: scoredFallback.slice(0, 5)
+    };
   }
 }
