@@ -12,28 +12,28 @@ function Quiz() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Load enhanced quiz data with scoring system
+    // Load enhanced quiz data with expanded nationwide options
     const quizData = [
       {
         "id": 1,
         "text": "Which academic stream do you prefer?",
         "type": "single",
-        "options": ["Science", "Commerce", "Arts", "Engineering"],
-        "score": {"Science": 3, "Commerce": 2, "Arts": 1, "Engineering": 3}
+        "options": ["Engineering", "Medical", "Science", "Commerce", "Management", "Arts"],
+        "score": {"Engineering": 3, "Medical": 3, "Science": 3, "Commerce": 2, "Management": 2, "Arts": 1}
       },
       {
         "id": 2,
         "text": "Preferred course type?",
         "type": "single",
-        "options": ["B.Tech", "B.Sc", "BBA", "BA", "Diploma"],
-        "score": {"B.Tech": 3, "B.Sc": 2, "BBA": 2, "BA": 1, "Diploma": 1}
+        "options": ["B.Tech", "MBBS", "B.Sc", "BBA", "MBA", "BA", "Diploma"],
+        "score": {"B.Tech": 3, "MBBS": 3, "B.Sc": 2, "BBA": 2, "MBA": 3, "BA": 1, "Diploma": 1}
       },
       {
         "id": 3,
         "text": "Location preference?",
         "type": "single",
-        "options": ["Srinagar", "Jammu", "Anantnag", "Leh", "Anywhere in J&K"],
-        "score": {"Srinagar": 3, "Jammu": 3, "Anantnag": 2, "Leh": 1, "Anywhere in J&K": 2}
+        "options": ["Jammu and Kashmir", "Delhi", "Mumbai", "Bangalore", "Chennai", "Pune", "Hyderabad", "Anywhere in India"],
+        "score": {"Jammu and Kashmir": 3, "Delhi": 3, "Mumbai": 3, "Bangalore": 3, "Chennai": 2, "Pune": 2, "Hyderabad": 2, "Anywhere in India": 2}
       },
       {
         "id": 4,
