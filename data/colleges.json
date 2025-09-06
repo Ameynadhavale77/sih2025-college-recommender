@@ -1,0 +1,20 @@
+[
+  {
+    "id": "c1",
+    "name": "ABC Government College",
+    "stream": "Science",
+    "lat": 19.07,
+    "lng": 72.87,
+    "cutoff": 85,
+    "facilities": ["Library", "Hostel"]
+  },
+  {
+    "id": "c2",
+    "name": "XYZ Government College",
+    "stream": "Arts",
+    "lat": 19.20,
+    "lng": 72.85,
+    "cutoff": 75,
+    "facilities": ["Sports", "Cafeteria"]
+  }
+]

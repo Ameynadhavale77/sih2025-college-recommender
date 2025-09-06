@@ -1,0 +1,20 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "text": "Do you enjoy solving math problems?",
+      "options": [
+        {"text": "Yes", "weights": {"science": 2, "commerce": 1}},
+        {"text": "No", "weights": {"arts": 2}}
+      ]
+    },
+    {
+      "id": 2,
+      "text": "Do you like reading literature?",
+      "options": [
+        {"text": "Yes", "weights": {"arts": 2}},
+        {"text": "No", "weights": {"science": 1}}
+      ]
+    }
+  ]
+}
