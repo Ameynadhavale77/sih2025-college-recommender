@@ -1,0 +1,98 @@
+frontend/
+├─ src/
+│  ├─ App.jsx
+│  ├─ index.jsx
+│  ├─ components/
+│  │   ├─ Quiz.jsx
+│  │   ├─ Result.jsx
+│  │   └─ CollegeCard.jsx
+│  └─ api/
+│      └─ recommender.js
+├─ package.json
+export async function getRecommendations(answers) {
+  const res = await fetch("http://localhost:5001/recommend", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answers })
+  });
+  const data = await res.json();
+  return data.topColleges;
+}
+import { useState } from "react";
+import { getRecommendations } from "../api/recommender";
+import Result from "./Result";
+
+export default function Quiz({ questions }) {
+  const [answers, setAnswers] = useState({});
+  const [topColleges, setTopColleges] = useState([]);
+
+  const handleChange = (qId, value) => {
+    setAnswers({ ...answers, [qId]: value });
+  };
+
+  const handleSubmit = async () => {
+    const result = await getRecommendations(answers);
+    setTopColleges(result);
+  };
+
+  if(topColleges.length > 0) return <Result colleges={topColleges} />;
+
+  return (
+    <div>
+      {questions.map(q => (
+        <div key={q.id}>
+          <h3>{q.text}</h3>
+          {q.options.map(opt => (
+            <label key={opt}>
+              <input 
+                type={q.type === "single" ? "radio" : "checkbox"}
+                name={`q-${q.id}`}
+                value={opt}
+                onChange={e => handleChange(q.id, e.target.value)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      ))}
+      <button onClick={handleSubmit}>Get Recommendations</button>
+    </div>
+  );
+}
+import CollegeCard from "./CollegeCard";
+
+export default function Result({ colleges }) {
+  return (
+    <div>
+      <h2>Top College Recommendations</h2>
+      {colleges.map(c => (
+        <CollegeCard key={c.name} college={c} />
+      ))}
+    </div>
+  );
+}
+export default function CollegeCard({ college }) {
+  return (
+    <div style={{border:"1px solid gray", padding:"10px", margin:"10px"}}>
+      <h3>{college.name}</h3>
+      <p>Location: {college.location}</p>
+      <p>Courses: {college.courses.join(", ")}</p>
+      <p>Cutoff: {college.cutoff}</p>
+      <p>Hostel: {college.hostel ? "Yes" : "No"}</p>
+      <p>Budget: {college.budget}</p>
+    </div>
+  );
+}
+import Quiz from "./components/Quiz";
+import quizData from "../data/quiz.json";
+
+function App() {
+  return (
+    <div>
+      <h1>JK College Recommender</h1>
+      <Quiz questions={quizData} />
+    </div>
+  );
+}
+
+export default App;

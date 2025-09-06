@@ -1,0 +1,62 @@
+[
+  {
+    "id": "course1",
+    "name": "Computer Science Engineering",
+    "stream": "Science", 
+    "duration": "4 years",
+    "degree": "B.Tech",
+    "subjects": ["Programming", "Data Structures", "Database", "Networks"],
+    "career_options": ["Software Developer", "System Analyst", "Data Scientist"],
+    "avg_salary": "6-12 LPA"
+  },
+  {
+    "id": "course2",
+    "name": "Medicine",
+    "stream": "Science",
+    "duration": "5.5 years", 
+    "degree": "MBBS",
+    "subjects": ["Anatomy", "Physiology", "Pathology", "Surgery"],
+    "career_options": ["Doctor", "Surgeon", "Medical Officer"],
+    "avg_salary": "8-20 LPA"
+  },
+  {
+    "id": "course3",
+    "name": "Commerce",
+    "stream": "Commerce",
+    "duration": "3 years",
+    "degree": "BCom", 
+    "subjects": ["Accounting", "Economics", "Business Studies", "Statistics"],
+    "career_options": ["Accountant", "Business Analyst", "Finance Manager"],
+    "avg_salary": "3-8 LPA"
+  },
+  {
+    "id": "course4",
+    "name": "English Literature",
+    "stream": "Arts",
+    "duration": "3 years",
+    "degree": "BA",
+    "subjects": ["Poetry", "Drama", "Fiction", "Language Studies"],
+    "career_options": ["Teacher", "Writer", "Journalist", "Content Creator"],
+    "avg_salary": "2-6 LPA"
+  },
+  {
+    "id": "course5",
+    "name": "Business Administration", 
+    "stream": "Commerce",
+    "duration": "3 years",
+    "degree": "BBA",
+    "subjects": ["Management", "Marketing", "Finance", "Operations"],
+    "career_options": ["Manager", "Business Consultant", "Entrepreneur"],
+    "avg_salary": "4-10 LPA"
+  },
+  {
+    "id": "course6",
+    "name": "Education",
+    "stream": "Arts", 
+    "duration": "2 years",
+    "degree": "B.Ed",
+    "subjects": ["Psychology", "Pedagogy", "Subject Teaching", "Assessment"],
+    "career_options": ["Teacher", "Principal", "Education Officer"],
+    "avg_salary": "3-7 LPA"
+  }
+]

@@ -1,0 +1,89 @@
+# -------- Step 1: Pull latest repo --------
+git pull origin main
+
+# -------- Step 2: Install dependencies --------
+cd frontend
+npm install
+cd ../backend/functions
+npm install
+cd ../../
+
+# -------- Step 3: Ensure data folder --------
+mkdir -p data
+
+# -------- Step 4: Create Quiz JSON with questions + scoring --------
+cat > data/quiz.json <<EOL
+[
+  {
+    "id": 1,
+    "text": "Which academic stream do you prefer?",
+    "type": "single",
+    "options": ["Science", "Commerce", "Arts", "Engineering"],
+    "score": {"Science": 3, "Commerce": 2, "Arts": 1, "Engineering": 3}
+  },
+  {
+    "id": 2,
+    "text": "Preferred course type?",
+    "type": "multi",
+    "options": ["B.Tech", "B.Sc", "BBA", "BA", "Diploma"],
+    "score": {"B.Tech": 3, "B.Sc": 2, "BBA": 2, "BA": 1, "Diploma": 1}
+  },
+  {
+    "id": 3,
+    "text": "Location preference?",
+    "type": "single",
+    "options": ["Srinagar", "Jammu", "Anantnag", "Leh", "Anywhere in J&K"],
+    "score": {"Srinagar": 3, "Jammu": 3, "Anantnag": 2, "Leh": 1, "Anywhere in J&K": 2}
+  },
+  {
+    "id": 4,
+    "text": "Interest in practical labs / hands-on work?",
+    "type": "single",
+    "options": ["High", "Medium", "Low"],
+    "score": {"High": 3, "Medium": 2, "Low": 1}
+  }
+]
+EOL
+
+# -------- Step 5: Create College JSON with course mapping --------
+cat > data/jk_colleges.json <<EOL
+[
+  {"name":"University of Kashmir","location":"Srinagar","courses":["B.Sc","BA","B.Tech"],"cutoff":70,"hostel":true,"budget":"Medium"},
+  {"name":"GC Jammu","location":"Jammu","courses":["BBA","BA","B.Sc"],"cutoff":65,"hostel":false,"budget":"Low"},
+  {"name":"NIT Srinagar","location":"Srinagar","courses":["B.Tech"],"cutoff":80,"hostel":true,"budget":"High"}
+]
+EOL
+
+# -------- Step 6: Generate Recommender JS function --------
+cat > backend/functions/recommender.js <<EOL
+const colleges = require("../../data/jk_colleges.json");
+const quiz = require("../../data/quiz.json");
+
+function recommend(userAnswers) {
+    let scoredColleges = colleges.map(college => {
+        let score = 0;
+        quiz.forEach(q => {
+            const ans = userAnswers[q.id];
+            if(ans){
+                if(Array.isArray(ans)){
+                    ans.forEach(a => { score += q.score[a] || 0; });
+                } else {
+                    score += q.score[ans] || 0;
+                }
+            }
+            // Boost if college has preferred courses
+            if(college.courses.includes(ans)) score += 1;
+            if(college.location === userAnswers[3]) score += 2;
+        });
+        return {...college, score};
+    });
+    scoredColleges.sort((a,b)=>b.score - a.score);
+    return scoredColleges.slice(0,5); // top 5
+}
+
+module.exports = { recommend };
+EOL
+
+# -------- Step 7: Notify user --------
+echo "✅ Full setup complete. Frontend, backend, quiz, colleges, and recommender logic ready."
+echo "Run 'npm run dev' in frontend folder to preview."

@@ -1,0 +1,8 @@
+[
+  {"name":"University of Kashmir","location":"Srinagar","courses":["B.Sc","BA","B.Tech"],"cutoff":70,"hostel":true,"budget":"Medium"},
+  {"name":"GC Jammu","location":"Jammu","courses":["BBA","BA","B.Sc"],"cutoff":65,"hostel":false,"budget":"Low"},
+  {"name":"NIT Srinagar","location":"Srinagar","courses":["B.Tech"],"cutoff":80,"hostel":true,"budget":"High"},
+  {"name":"University of Jammu","location":"Jammu","courses":["B.Tech","B.Sc","BBA"],"cutoff":75,"hostel":true,"budget":"Medium"},
+  {"name":"Government Medical College Jammu","location":"Jammu","courses":["MBBS"],"cutoff":90,"hostel":true,"budget":"Low"},
+  {"name":"Cluster University Srinagar","location":"Srinagar","courses":["BA","BBA","Diploma"],"cutoff":60,"hostel":false,"budget":"Low"}
+]

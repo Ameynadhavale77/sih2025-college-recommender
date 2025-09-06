@@ -1,49 +1,84 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getRecommendations } from '../api/recommender'
+import Result from './Result'
 
 function Quiz() {
   const [questions, setQuestions] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState({})
+  const [topColleges, setTopColleges] = useState([])
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Load quiz data (in real app, this would be an API call)
-    const quizData = {
-      "questions": [
-        {
-          "id": 1,
-          "text": "Do you enjoy solving math problems?",
-          "options": [
-            {"text": "Yes", "weights": {"science": 2, "commerce": 1}},
-            {"text": "No", "weights": {"arts": 2}}
-          ]
-        },
-        {
-          "id": 2,
-          "text": "Do you like reading literature?",
-          "options": [
-            {"text": "Yes", "weights": {"arts": 2}},
-            {"text": "No", "weights": {"science": 1}}
-          ]
-        }
-      ]
-    }
-    setQuestions(quizData.questions)
+    // Load enhanced quiz data with scoring system
+    const quizData = [
+      {
+        "id": 1,
+        "text": "Which academic stream do you prefer?",
+        "type": "single",
+        "options": ["Science", "Commerce", "Arts", "Engineering"],
+        "score": {"Science": 3, "Commerce": 2, "Arts": 1, "Engineering": 3}
+      },
+      {
+        "id": 2,
+        "text": "Preferred course type?",
+        "type": "single",
+        "options": ["B.Tech", "B.Sc", "BBA", "BA", "Diploma"],
+        "score": {"B.Tech": 3, "B.Sc": 2, "BBA": 2, "BA": 1, "Diploma": 1}
+      },
+      {
+        "id": 3,
+        "text": "Location preference?",
+        "type": "single",
+        "options": ["Srinagar", "Jammu", "Anantnag", "Leh", "Anywhere in J&K"],
+        "score": {"Srinagar": 3, "Jammu": 3, "Anantnag": 2, "Leh": 1, "Anywhere in J&K": 2}
+      },
+      {
+        "id": 4,
+        "text": "Interest in practical labs / hands-on work?",
+        "type": "single",
+        "options": ["High", "Medium", "Low"],
+        "score": {"High": 3, "Medium": 2, "Low": 1}
+      }
+    ]
+    setQuestions(quizData)
   }, [])
 
-  const handleAnswer = (optionIndex) => {
+  const handleAnswer = async (selectedOption) => {
     const newAnswers = { ...answers }
-    newAnswers[currentQuestion] = optionIndex
+    const questionId = questions[currentQuestion].id
+    newAnswers[questionId] = selectedOption
     setAnswers(newAnswers)
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
-      // Quiz completed - calculate results and navigate to dashboard
-      localStorage.setItem('quizAnswers', JSON.stringify(newAnswers))
-      navigate('/dashboard')
+      // Quiz completed - get recommendations
+      setLoading(true)
+      try {
+        const recommendations = await getRecommendations(newAnswers)
+        setTopColleges(recommendations)
+        localStorage.setItem('quizAnswers', JSON.stringify(newAnswers))
+        localStorage.setItem('recommendations', JSON.stringify(recommendations))
+      } catch (error) {
+        console.error('Error getting recommendations:', error)
+      }
+      setLoading(false)
     }
+  }
+
+  // Show results if we have recommendations
+  if (topColleges.length > 0) {
+    return <Result colleges={topColleges} />
+  }
+
+  // Show loading state
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="text-xl">🔄 Finding your perfect colleges...</div>
+    </div>
   }
 
   if (questions.length === 0) {
@@ -78,10 +113,10 @@ function Quiz() {
               {question.options.map((option, index) => (
                 <button
                   key={index}
-                  onClick={() => handleAnswer(index)}
+                  onClick={() => handleAnswer(option)}
                   className="w-full p-4 text-left bg-gray-50 hover:bg-purple-100 border border-gray-200 rounded-lg transition duration-300"
                 >
-                  {option.text}
+                  {option}
                 </button>
               ))}
             </div>

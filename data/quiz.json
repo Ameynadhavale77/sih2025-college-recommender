@@ -1,20 +1,30 @@
-{
-  "questions": [
-    {
-      "id": 1,
-      "text": "Do you enjoy solving math problems?",
-      "options": [
-        {"text": "Yes", "weights": {"science": 2, "commerce": 1}},
-        {"text": "No", "weights": {"arts": 2}}
-      ]
-    },
-    {
-      "id": 2,
-      "text": "Do you like reading literature?",
-      "options": [
-        {"text": "Yes", "weights": {"arts": 2}},
-        {"text": "No", "weights": {"science": 1}}
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "text": "Which academic stream do you prefer?",
+    "type": "single",
+    "options": ["Science", "Commerce", "Arts", "Engineering"],
+    "score": {"Science": 3, "Commerce": 2, "Arts": 1, "Engineering": 3}
+  },
+  {
+    "id": 2,
+    "text": "Preferred course type?",
+    "type": "multi",
+    "options": ["B.Tech", "B.Sc", "BBA", "BA", "Diploma"],
+    "score": {"B.Tech": 3, "B.Sc": 2, "BBA": 2, "BA": 1, "Diploma": 1}
+  },
+  {
+    "id": 3,
+    "text": "Location preference?",
+    "type": "single",
+    "options": ["Srinagar", "Jammu", "Anantnag", "Leh", "Anywhere in J&K"],
+    "score": {"Srinagar": 3, "Jammu": 3, "Anantnag": 2, "Leh": 1, "Anywhere in J&K": 2}
+  },
+  {
+    "id": 4,
+    "text": "Interest in practical labs / hands-on work?",
+    "type": "single",
+    "options": ["High", "Medium", "Low"],
+    "score": {"High": 3, "Medium": 2, "Low": 1}
+  }
+]
