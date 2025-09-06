@@ -1,0 +1,7 @@
+run = "cd frontend && npm install && npm run dev"
+
+[env]
+PORT = "3000"
+
+[interpreter]
+command = ["node"]
