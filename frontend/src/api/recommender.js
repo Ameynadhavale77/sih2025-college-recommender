@@ -1,6 +1,24 @@
-// Mock API call for recommendations - replace with Firebase function URL
+// API call for recommendations
 export async function getRecommendations(answers) {
-  // For now, using local algorithm since Firebase functions aren't deployed
+  try {
+    // Try backend API first
+    const response = await fetch('/api/recommend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userAnswers: answers })
+    })
+    
+    if (response.ok) {
+      const data = await response.json()
+      return data.recommendations || data
+    }
+  } catch (error) {
+    console.warn('Backend API not available, using local algorithm:', error)
+  }
+
+  // Fallback to local algorithm
   const colleges = [
     {"name":"University of Kashmir","location":"Srinagar","courses":["B.Sc","BA","B.Tech"],"cutoff":70,"hostel":true,"budget":"Medium"},
     {"name":"GC Jammu","location":"Jammu","courses":["BBA","BA","B.Sc"],"cutoff":65,"hostel":false,"budget":"Low"},
